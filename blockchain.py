@@ -1,9 +1,3 @@
-
-# coding: utf-8
-
-# In[39]:
-
-
 from hashlib import sha256
 import json
 import time
@@ -38,11 +32,6 @@ class Blockchain:
         self.create_genesis_block()
 
     def create_genesis_block(self):
-        """
-        A function to generate genesis block and appends it to
-        the chain. The block has index 0, previous_hash as 0, and
-        a valid hash.
-        """
         genesis_block = Block(0, [], time.time(), "0")
         genesis_block.hash = genesis_block.compute_hash()
         self.chain.append(genesis_block)
@@ -52,13 +41,6 @@ class Blockchain:
         return self.chain[-1]
 
     def add_block(self, block, proof):
-        """
-        A function that adds the block to the chain after verification.
-        Verification includes:
-        * Checking if the proof is valid.
-        * The previous_hash referred in the block and the hash of latest block
-          in the chain match.
-        """
         previous_hash = self.last_block.hash
 
         if previous_hash != block.previous_hash:
@@ -72,18 +54,10 @@ class Blockchain:
         return True
 
     def is_valid_proof(self, block, block_hash):
-        """
-        Check if block_hash is valid hash of block and satisfies
-        the difficulty criteria.
-        """
         return (block_hash.startswith('0' * Blockchain.difficulty) and
                 block_hash == block.compute_hash())
 
     def proof_of_work(self, block):
-        """
-        Function that tries different values of nonce to get a hash
-        that satisfies our difficulty criteria.
-        """
         block.nonce = 0
 
         computed_hash = block.compute_hash()
@@ -98,11 +72,6 @@ class Blockchain:
 
     def mine(self):
         print(f"Unconfirmed transactions:: {self.unconfirmed_transactions}\n\n")
-        """
-        This function serves as an interface to add the pending
-        transactions to the blockchain by adding them to the block
-        and figuring out Proof Of Work.
-        """
         if not self.unconfirmed_transactions:
             return False
 
@@ -122,9 +91,6 @@ class Blockchain:
 
 app = Flask(__name__)
 blockchain = Blockchain()
-
-
-# In[41]:
 
 
 @app.route('/chain', methods=['GET'])
@@ -160,9 +126,6 @@ def new_block():
     blockchain.mine()
     """
 
-# In[45]:
-
-
-
+# Check Port
 app.run(debug=True, port=6000)
 
